@@ -1,40 +1,42 @@
 
-AFRAME.registerComponent('markerhandler', {
-
-    init: function() {
-        const animatedMarker = document.querySelector("#white-box-marker");
-        const aEntity = document.querySelector("#white-box");
-
-        // every click, we make our model grow in size :)
-        animatedMarker.addEventListener('click', function(ev, target){
-            console.log('u clicked it');
-            console.log('ev', ev);
-            console.log('target', target);
-            console.log('ev.detail', ev.detail);
-            console.log('ev.detail.intersectedEl', ev.detail.intersectedEl);
-            const intersectedElement = ev && ev.detail && ev.detail.intersectedEl;
-            if (aEntity && intersectedElement === aEntity) {
-                const scale = aEntity.getAttribute('scale');
-                Object.keys(scale).forEach((key) => scale[key] = scale[key] + 1);
-                aEntity.setAttribute('scale', scale);
-            }
-        });
-}});
+AFRAME.registerComponent('whiteboxhandler', {
+    // init: function() {
+    //     const whiteBoxMarker = document.querySelector("#white-box-marker")
+    //     const whiteBox = document.querySelector("#white-box")
+    //     let whiteBoxMarkerPosition = whiteBoxMarker.object3D.position
+    //     whiteBoxMarker.addEventListener('click', function(ev, target){
+    //         const intersectedElement = ev && ev.detail && ev.detail.intersectedEl
+    //         if (whiteBox && intersectedElement === whiteBox) {
+    //             alert('you clicked the white box!')
+    //         }
+    //     })
+    // },
+    tick: function() {
+      if (this.el.object3D.position.x !== 0) {
+        let boxPosition = {...this.el.object3D.position, id: this.el.id}
+        this.el.emit('position', boxPosition)
+      }
+    }
+});
 
 AFRAME.registerComponent('bigboxhandler', {
+    schema: {
+      color: { type: 'string', default: 'red'},
+    },
+    // init: function() {
+    //     const bigBoxMarker = document.querySelector("#big-box-marker");
+    //     const bigBox = document.querySelector("#big-box");
+    // },
+    tick: function() {
+      if (this.el.object3D.position.x !== 0) {
+        let boxPosition = {...this.el.object3D.position, id: this.el.id}
+        this.el.emit('position', boxPosition)
+      }
+    }
+});
 
-    init: function() {
-        const animatedMarker = document.querySelector("#big-box-marker");
-        const aEntity = document.querySelector("#big-box");
-
-        // every click, we make our model grow in size :)
-        animatedMarker.addEventListener('click', function(ev, target){
-            console.log(aEntity.position)
-            const intersectedElement = ev && ev.detail && ev.detail.intersectedEl;
-            if (aEntity && intersectedElement === aEntity) {
-                const scale = aEntity.getAttribute('scale');
-                Object.keys(scale).forEach((key) => scale[key] = scale[key] + 1);
-                aEntity.setAttribute('scale', scale);
-            }
-        });
-}});
+AFRAME.registerComponent('rotating-gem', {
+  tick: function() {
+    this.el.object3D.rotation += 1
+  }
+})
