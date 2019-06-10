@@ -11,9 +11,7 @@
     <img id='hamburger' src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/1200px-Hamburger_icon.svg.png" alt="Menu">
   </div>
   <a-scene id='scene' embedded arjs='sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'>
-        <a-marker id="little-box-marker" type='barcode' value='6'>
-            <a-box id='little-box' scale='.75'>
-            </a-box>
+        <a-marker gamepiece id="marker-code-6" type='barcode' value='6'>
         </a-marker>
 
         <a-marker bigboxhandler emitevents="true" cursor="rayOrigin: mouse" id="big-box-marker" type='barcode' value='14'>

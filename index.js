@@ -41,6 +41,7 @@ function changeStage(entityId, stage) {
       case 1:
           entityId.forEach(id => {
             let entity = document.querySelector(`#${/^(.*)-\w+$/.exec(id)[1]}`)
+            console.log(entity);
             entity.setAttribute('color', 'green')
           })
           store.stage = 1
@@ -53,7 +54,7 @@ function changeStage(entityId, stage) {
             // gem.setAttribute('rotating-gem', '')
             gem.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: true; dur 1000')
             gem.setAttribute('color', 'blue')
-
+            console.log(entity);
             entity.appendChild(gem)
             store.canEvolve = false
           })
@@ -69,6 +70,6 @@ function distanceBetweenMarkers(markerOne, markerTwo ) {
               Math.pow((markerTwo.y - markerOne.y), 2)+
               Math.pow((markerTwo.z - markerOne.z), 2)
           )
-          console.log(result);
+          // console.log(result);
   return result
 }
