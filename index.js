@@ -40,14 +40,14 @@ function changeStage(entityId, stage) {
     switch (stage) {
       case 1:
           entityId.forEach(id => {
-            entity = document.querySelector(`#${/^(.*)-\w+$/.exec(id)[1]}`)
+            let entity = document.querySelector(`#${/^(.*)-\w+$/.exec(id)[1]}`)
             entity.setAttribute('color', 'green')
           })
           store.stage = 1
         break;
       case 2:
           entityId.forEach(id => {
-            entity = document.querySelector(`#${/^(.*)-\w+$/.exec(id)[1]}`)
+            let entity = document.querySelector(`#${/^(.*)-\w+$/.exec(id)[1]}`)
             let gem = document.createElement('a-octahedron')
             gem.object3D.position.set(0, 2, 0)
             // gem.setAttribute('rotating-gem', '')
