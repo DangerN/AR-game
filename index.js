@@ -1,3 +1,10 @@
+// let hamburger = document.querySelector('#hamburger')
+// hamburger.addEventListener('click', (event => {
+//   let menuItems = document.querySelector('.menu-items')
+//   console.log(menuItems.style.display);
+//   menuItems.style.display==='none' ? menuItems.style.diplay = 'block' : menuItems.style.display = 'none'
+// }))
+
 let store = {
   canEvolve: true,
   markerPositions: {},
@@ -48,7 +55,6 @@ function changeStage(entityId, stage) {
             let entity = document.querySelector(`#${/^(.*)-\w+$/.exec(id)[1]}`)
             let gem = document.createElement('a-octahedron')
             gem.object3D.position.set(0, 2, 0)
-            // gem.setAttribute('rotating-gem', '')
             gem.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: true; dur 1000')
             gem.setAttribute('color', 'blue')
             console.log(entity);
