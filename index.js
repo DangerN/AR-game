@@ -11,8 +11,6 @@ scene.addEventListener('position', event => {
 )
 
 setInterval(checkMarkerPositions, 1000)
-// resetEvolve()
-
 function resetEvolve() {
   store.canEvolve = false
   setTimeout(_=>store.canEvolve = true, 5000)
@@ -36,7 +34,6 @@ function rotateGem(gem) {
 }
 
 function changeStage(entityId, stage) {
-    // resetEvolve()
     switch (stage) {
       case 1:
           entityId.forEach(id => {
@@ -70,6 +67,5 @@ function distanceBetweenMarkers(markerOne, markerTwo ) {
               Math.pow((markerTwo.y - markerOne.y), 2)+
               Math.pow((markerTwo.z - markerOne.z), 2)
           )
-          // console.log(result);
   return result
 }

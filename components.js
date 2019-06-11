@@ -1,38 +1,57 @@
 AFRAME.registerState({
-  intitialState: {
-    markers: []
+  initialState: {
+    markers: {},
+    markerDistance: {},
+    color: 'blue'
   },
   handlers: {
-    // yeet4
     updatePostion: function (state, action) {
       let {x, y, z, id} = action
-      state[id] = {...state[id], x: x, y: y, z: z}
-      console.log(state);
+      state.markers[id] = {...state.markers[id], x: x, y: y, z: z}
     },
-    setStage: function (state, action) {
+    handlePieceInit: function (state, action) {
       console.log(state);
-      let {stage, id} = action
-      console.log(stage, id);
-      state[id] = { stage: stage}
-      console.log(state);
+      let {stage, id, color} = action
+      state.markers[id] = {stage: stage, color: color}
+      state.markerDistance[id] = {}
     }
+  },
+  computeState: function (newState, payload) {
+    if (payload !== 'updatePostion') {return}
+    let markerList = Object.keys(newState.markerDistance)
+    let markerPositionList = {}
+    markerList.forEach(marker => {
+      markerPositionList[marker] = markerList.filter(mark=>mark !== marker).map(targetMarker => {
+            let distance = 0
+            let markerOne = newState.markers[marker]
+            let markerTwo = newState.markers[targetMarker]
+            distance =  Math.sqrt(
+              Math.pow((markerTwo.x - markerOne.x), 2)+
+              Math.pow((markerTwo.y - markerOne.y), 2)+
+              Math.pow((markerTwo.z - markerOne.z), 2)
+            )
+            return {[targetMarker]: distance}
+      })
+    })
+    newState.markerDistance = {...markerPositionList}
   }
 })
 
 AFRAME.registerComponent('gamepiece', {
   init: function() {
-    // console.log(this)
-    box = document.createElement('a-box')
+    let box = document.createElement('a-box')
     this.el.appendChild(box)
-    // console.log(AFRAME.scenes[0]);
-    // this.el.emit('updatePostion', {...this.el.object3D.position, id: this.el.id, stage: 0})
-    this.el.emit('setStage', {id: this.el.id, stage: 0})
+    this.el.emit('handlePieceInit', {id: this.el.id, stage: 0, color: 'blue'})
   },
   tick: function() {
     if (this.el.object3D.position.x !== 0) {
       let boxPosition = {...this.el.object3D.position, id: this.el.id}
       this.el.emit('updatePostion', boxPosition)
     }
+  },
+  update: function() {
+    let box = this.el.querySelector('a-box')
+    box.setAttribute('bind__color', `value: color`)
   }
 });
 
