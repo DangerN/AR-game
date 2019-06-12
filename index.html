@@ -1,31 +1,19 @@
-<!-- include A-Frame obviously -->
+<!-- include A-Frame  -->
 <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
 <!-- include ar.js for A-Frame -->
-<script src="https://unpkg.com/aframe-state-component@6.6.0/dist/aframe-state-component.min.js"></script>
 <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
-
-    <script src="./components.js"></script>
+<!-- include A-Frame state component -->
+<script src="https://unpkg.com/aframe-state-component@6.6.0/dist/aframe-state-component.min.js"></script>
+<!-- include my compents -->
+<script src="./components.js"></script>
 <link rel="stylesheet" href="./index.css">
 <body style='height: 100%; width: 100%; margin: 0;'>
-  <!-- <nav class="menu">
-    <label for='menu-toggle'>
-      <img id='hamburger' src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/1200px-Hamburger_icon.svg.png" alt="Menu"></img>
-    </label>
-    <input type="checkbox" id='menu-toggle'>
-    <ul class='menu-items'>
-      <li>im a menu item!</li>
-      <li>im a menu item!</li>
-      <li>im a menu item!</li>
-      <li>im a menu item!</li>
-    </ul>
-  </nav> -->
   <a-scene id='scene' embedded arjs='sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'>
+
         <a-marker gamepiece id="markerCode6" type='barcode' value='6'>
         </a-marker>
-
         <a-marker gamepiece id="markerCode21" type='barcode' value='21'>
         </a-marker>
-
         <a-marker gamepiece id="markerCode5" type='barcode' value='5'>
         </a-marker>
         <a-marker gamepiece id="markerCode14" type='barcode' value='14'>
@@ -33,17 +21,6 @@
         <a-marker gamepiece id="markerCode29" type='barcode' value='29'>
         </a-marker>
 
-        <!-- <a-marker bigboxhandler emitevents="true" cursor="rayOrigin: mouse" id="big-box-marker" type='barcode' value='14'>
-             <a-box  id='big-box' color="white" scale='1.25' >
-              </a-box>
-        </a-marker>
-
-        <a-marker whiteboxhandler emitevents="true" cursor="rayOrigin: mouse" id="white-box-marker" type='barcode' value='29'>
-             <a-box id='white-box' color="white" depth="1" height="1" width="1" >
-              </a-box>
-        </a-marker> -->
-
         <a-entity camera></a-entity>
   </a-scene>
-<!-- <script src="./index.js" type='module'></script> -->
 </body>

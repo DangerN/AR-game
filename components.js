@@ -4,21 +4,16 @@ AFRAME.registerState({
     markerDistance: {},
   },
   handlers: {
-    colorChange: function (state, action) {
-      state.markers[action.id].color === 'blue' ?
-        state.markers[action.id].color = 'red' :
-        state.markers[action.id].color = 'blue'
-    },
     updatePostion: function (state, action) {
       let {x, y, z, id} = action
       state.markers[id] = {...state.markers[id], x: x, y: y, z: z}
     },
     handlePieceInit: function (state, action) {
-      console.log(state);
-      let {stage, id, color} = action
-      state.markers[id] = {stage: stage, color: color}
+      let {stage, id} = action
+      state.markers[id] = {stage: stage}
       state.markerDistance[id] = {}
-    }
+      setInterval(_=>console.log(id, state.markers[id]), 5000)
+    },
   },
   computeState: function (newState, payload) {
     if (payload !== 'updatePostion') {return}
@@ -38,14 +33,26 @@ AFRAME.registerState({
       })
     })
     newState.markerDistance = {...markerPositionList}
+    markerList.forEach(marker => {
+      let closeMarkerList = newState.markerDistance[marker].filter(distance => {
+        return Object.values(distance)[0] < 2 ? true : false
+      })
+      if (closeMarkerList.length > 0 && newState.markers[marker].stage === 0) {
+        newState.markers[marker].stage = 1
+        console.log(newState);
+      }
+    })
   }
 })
 
 AFRAME.registerComponent('gamepiece', {
   init: function() {
-    let box = document.createElement('a-box')
-    this.el.appendChild(box)
-      this.el.emit('handlePieceInit', {id: this.el.id, stage: 0, color: 'white'})
+    this.el.emit('handlePieceInit', {id: this.el.id, stage: 0})
+    this.el.setAttribute('bind__stage', `markers.${this.el.id}.stage`)
+  },
+  update: function(oldData) {
+    console.log(this.el.id, 'has updated');
+    console.log(oldData);
   },
   tick: function() {
     let position = this.el.object3D.position
@@ -59,37 +66,5 @@ AFRAME.registerComponent('gamepiece', {
       }
       this.el.emit('updatePostion', markerPosition)
     }
-  },
-  update: function() {
-    console.log(this.el.id, 'was updated')
-    let box = this.el.querySelector('a-box')
-    box.setAttribute('bind__color', `markers.${this.el.id}.color`)
   }
-});
-//
-// AFRAME.registerComponent('whiteboxhandler', {
-//     tick: function() {
-//       if (this.el.object3D.position.x !== 0) {
-//         let boxPosition = {...this.el.object3D.position, id: this.el.id}
-//         this.el.emit('position', boxPosition)
-//       }
-//     }
-// });
-//
-// AFRAME.registerComponent('bigboxhandler', {
-//     schema: {
-//       color: { type: 'string', default: 'red'},
-//     },
-//     tick: function() {
-//       if (this.el.object3D.position.x !== 0) {
-//         let boxPosition = {...this.el.object3D.position, id: this.el.id}
-//         this.el.emit('position', boxPosition)
-//       }
-//     }
-// });
-//
-// AFRAME.registerComponent('rotating-gem', {
-//   tick: function() {
-//     this.el.object3D.rotation += 1
-//   }
-// })
+})
