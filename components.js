@@ -82,7 +82,7 @@ AFRAME.registerComponent('gamemarker', {
     let changeStage = stage => {
       this.el.setAttribute('piecedisplay', {stage: stage})
     }
-    this.el.emit('handleMarkerInit', {id: this.el.id, stage: 2, changeStage: changeStage})
+    this.el.emit('handleMarkerInit', {id: this.el.id, stage: 0, changeStage: changeStage})
   },
   tick: function() {
     let position = this.el.object3D.position
