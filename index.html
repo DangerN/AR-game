@@ -1,31 +1,75 @@
-<!-- include A-Frame obviously -->
+<!-- include A-Frame  -->
 <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
 <!-- include ar.js for A-Frame -->
 <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+<!-- include A-Frame state component -->
+<script src="https://unpkg.com/aframe-state-component@6.6.0/dist/aframe-state-component.min.js"></script>
+<!-- include my compents -->
+<script src="./components.js"></script>
+<!-- <script src="./constants.js"></script> -->
+<link rel="stylesheet" href="./index.css">
+<body style='height: 100%; width: 100%; margin: 0;'>
+  <div class='menu'>
+    <input type='checkbox'  class='menu-checkbox' id='menu-toggle'>
+    <label for="menu-toggle" class='menu-button'>&dArr;</label>
+    <ul class='menu-list'>
+      <li class='menu-item'>
+        <input type='checkbox'  class='instruction-checkbox' id='instruction-toggle'>
+        <label for="instruction-toggle" class='instruction-button'>AR GAME</label>
+        <div class="instructions">
+          <p class='instruction-item'>AR GAME instructions</p>
+          <p class='instruction-item'>This in an AR game to be played with <a href="#">paper markers.</a></p>
+          <p class='instruction-item'>Goal: Arrange markers so that all cubes become blue.</p>
+          <p class='instruction-item'>You may log in to save your high score!</p>
+          <p class='instruction-item'><strong>Warning: There is no way to recover account data. Once you sign up do not forget your information.</strong></p>
+        </div>
+      </li>
+      <li class='menu-item'>
+        <input type='checkbox'  class='sign-in-checkbox' id='sign-in-toggle'>
+        <label for="sign-in-toggle" class='sign-in-button'>authenticate</label>
+        <form class='sign-in-form'>
+          <input type="text" class='login-input' id='username' name='username' placeholder="username"><br>
+          <input type="password" class='login-input' id='password' name="password" placeholder="password">
+          <input type='submit' class='login-input' id='sign-in-button' value='Sign In'>
+          <input type='button' class='login-input' id='sign-up-button' value='Sign Up'>
+        </form>
+      </li>
+      <li class-='menu-item'></li>
+      <li class='menu-item'>
+        <input type='checkbox'  class='leader-board-checkbox' id='leader-board-toggle'>
+        <label for="leader-board-toggle" class='leader-board-button'>leader board</label>
+        <ul class='leader-board'>
+          <li><span>name</span><span>time</span></li>
+        </ul>
+        <input type='checkbox'  class='win-box-checkbox' id='win-box-toggle'>
+        <ul class="win-box">
+          <li>puzzle solved!</li>
+          <li><span>time:</span><span id='win-time-display'></span></li>
+          <li id='new-record-display'>new record!</li>
+          <li>
+            <input type="button" class='win-button' id='replay-button' name="" value="replay">
+            <input type="button" class='win-button' id='submit-score-button' name="" value="submit score">
+          </li>
+        </ul>
+      </li>
+      <li class='menu-item'><a href="https://github.com/DangerN/AR-game">github</a></li>
+    </ul>
+  </div>
 
-    <script src="./events.js"></script>
+  <a-scene id='scene' embedded arjs='sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'>
 
-<body style='margin : 0px; overflow: hidden;'>
-  <a-scene embedded arjs='sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'>
-
-        <a-marker id="little-box" type='barcode' value='6'>
-            <a-entity geometry="primitive: box; height: 2"
-                animation="property: rotation; dur: 3000; to: 0 360 180; loop: true" >
-            ></a-entity>
+        <a-marker gamemarker id="markerCode6" type='barcode' value='6'>
         </a-marker>
-
-        <a-marker bigboxhandler emitevents="true" cursor="rayOrigin: mouse" id="big-box-marker" type='barcode' value='14'>
-             <a-box  id='big-box' color="tomato" depth="2" height="2" width="2" >
-              </a-box>
+        <a-marker gamemarker id="markerCode21" type='barcode' value='21'>
         </a-marker>
-
-        <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="white-box-marker" type='barcode' value='29'>
-             <a-box id='white-box' color="white" depth="1" height="1" width="1"
-                animation="property: rotation; dur: 3000; to: 0 360 0; loop: true" >
-              </a-box>
+        <a-marker gamemarker id="markerCode5" type='barcode' value='5'>
+        </a-marker>
+        <a-marker gamemarker id="markerCode14" type='barcode' value='14'>
+        </a-marker>
+        <a-marker gamemarker id="markerCode29" type='barcode' value='29'>
         </a-marker>
 
         <a-entity camera></a-entity>
   </a-scene>
-<script src="./index.js"></script>
+  <script src="./index.js" type='module'></script>
 </body>
