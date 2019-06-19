@@ -1,77 +1,185 @@
-// let hamburger = document.querySelector('#hamburger')
-// hamburger.addEventListener('click', (event => {
-//   let menuItems = document.querySelector('.menu-items')
-//   console.log(menuItems.style.display);
-//   menuItems.style.display==='none' ? menuItems.style.diplay = 'block' : menuItems.style.display = 'none'
-// }))
+import {PATH, DISPLAY_ELEMENTS, AUTH_ELEMENTS, MENU_TOGGLES} from './constants.js'
 
-let store = {
-  canEvolve: true,
-  markerPositions: {},
-  stage: 0
+initializeMenu()
+
+function initializeMenu() {
+  AUTH_ELEMENTS.signInForm.addEventListener('submit', handleSignIn)
+  AUTH_ELEMENTS.signUpButton.addEventListener('click', handleSignUp)
+  DISPLAY_ELEMENTS.menu.addEventListener('win', handleWin)
+  getLeaderBoard()
+  checkLoginStatus() ? cycleMenu() : cycleGuestMenu()
 }
 
-let scene = document.querySelector('#scene')
-scene.addEventListener('position', event => {
-  store.markerPositions[event.detail.id] = {x: event.detail.x, y: event.detail.y, z: event.detail.z}
+function cycleMenu() {
+  toggleMenu(['menu','leaderBoard'])
+  setTimeout(_=>toggleMenu(['menu','leaderBoard'], 'closed'), 3500)
+}
+
+function cycleGuestMenu() {
+  toggleMenu(['menu','instructions'])
+  setTimeout(_=>toggleMenu(['menu','instructions'], 'closed'), 12000)
+}
+
+function checkLoginStatus() {
+  if (window.localStorage.getItem('token')) {
+    logIn(window.localStorage.getItem('name'))
+    return true
+  } else {
+    return false
   }
-)
-
-setInterval(checkMarkerPositions, 1000)
-function resetEvolve() {
-  store.canEvolve = false
-  setTimeout(_=>store.canEvolve = true, 5000)
 }
 
-function checkMarkerPositions() {
-  if (store.canEvolve && store.stage === 0) {
-      distanceBetweenMarkers(store.markerPositions['white-box-marker'], store.markerPositions['big-box-marker'] ) < 2
-        ? changeStage(Object.keys(store.markerPositions), 1)
-        : null
-    } else if (store.canEvolve && store.stage === 1) {
-      distanceBetweenMarkers(store.markerPositions['white-box-marker'], store.markerPositions['big-box-marker'] ) > 3
-        ? changeStage(Object.keys(store.markerPositions), 2)
-        : null
+function handleWin(event) {
+  let times = document.querySelectorAll('.leader-time')
+  DISPLAY_ELEMENTS.completionTime.innerText = event.detail
+  AUTH_ELEMENTS.replayButton.addEventListener('click', _=>location.reload())
+  AUTH_ELEMENTS.submitScoreButton.addEventListener('click', _=>submitScore(event.detail))
+  if([...times].filter(time=>time.innerText < event.detail).length === 0)
+  {
+    DISPLAY_ELEMENTS.newRecord.style.fontSize = '16px'
+  }
+  toggleMenu(['menu', 'leaderBoard', 'winBox'])
+}
+
+function submitScore(time) {
+  if (!!window.localStorage.getItem('token')) {
+    console.log('posting time', time, 'to databse')
+    let body = {
+      user_id: window.localStorage.getItem('user_id'),
+      time: time
     }
+    fetch(PATH.submit_score, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer: ${window.localStorage.getItem('token')}`
+      },
+      body: JSON.stringify(body)
+    }).then(response=>response.json())
+      .then(console.log)
+
+
+
+
+
+  } else {
+    redShadowPulse(AUTH_ELEMENTS.submitScoreButton)
+  }
 }
 
-function rotateGem(gem) {
-  console.log('rotaning gem');
-  gem.object3D.rotation.y += 5
+function toggleMenu(toggleList = Object.keys(MENU_TOGGLES), status = 'open') {
+  let toggleDirection = status === 'open' ? true : false
+  console.log(status, Date.now());
+  console.log(toggleDirection);
+  toggleList.forEach(toggle=>{MENU_TOGGLES[toggle].checked = toggleDirection})
 }
 
-function changeStage(entityId, stage) {
-    switch (stage) {
-      case 1:
-          entityId.forEach(id => {
-            let entity = document.querySelector(`#${/^(.*)-\w+$/.exec(id)[1]}`)
-            console.log(entity);
-            entity.setAttribute('color', 'green')
-          })
-          store.stage = 1
-        break;
-      case 2:
-          entityId.forEach(id => {
-            let entity = document.querySelector(`#${/^(.*)-\w+$/.exec(id)[1]}`)
-            let gem = document.createElement('a-octahedron')
-            gem.object3D.position.set(0, 2, 0)
-            gem.setAttribute('animation', 'property: rotation; to: 0 360 0; loop: true; dur 1000')
-            gem.setAttribute('color', 'blue')
-            console.log(entity);
-            entity.appendChild(gem)
-            store.canEvolve = false
-          })
-        break;
-      default:
+function handleSignIn(event) {
+  event.preventDefault()
+  let form = event.target.parentElement.querySelectorAll('.login-input')
+  let loginCredentials = {
+    name: form[0].value,
+    password: form[1].value
+  }
+  fetch(PATH.auth,{
+    method: 'POST',
+    headers: {'Content-Type': 'application/json '},
+    body: JSON.stringify(loginCredentials)
+  }).then(response=>response.json())
+    .then(handleAuthResponse)
+}
+
+function handleAuthResponse(response) {
+  response.auth_token ? authSuccess(response) : authFailed()
+}
+
+function authSuccess(response) {
+  console.log(response);
+  window.localStorage.setItem('token', response.auth_token)
+  window.localStorage.setItem('name', response.name)
+  window.localStorage.setItem('user_id', response.id)
+  logIn(response.name)
+}
+
+function logIn(name) {
+  destroyChildren(AUTH_ELEMENTS.signInForm)
+  MENU_TOGGLES.authentication.checked = false
+  AUTH_ELEMENTS.signInForm.style.maxHeight = '16px'
+  AUTH_ELEMENTS.signInButton.innerText = name
+  AUTH_ELEMENTS.signInForm.appendChild(signOutButton())
+}
+
+function destroyChildren(element) {
+  while (element.firstChild) {
+    element.removeChild(element.firstChild)
+  }
+}
+
+function signOutButton() {
+  let signOutButton = document.createElement('input')
+  signOutButton.classList.add('login-input')
+  signOutButton.value = 'Log Out'
+  signOutButton.type = 'button'
+  signOutButton.addEventListener('click', logOut)
+  return signOutButton
+}
+
+function logOut() {
+  window.localStorage.removeItem('token')
+  window.localStorage.removeItem('name')
+  location.reload()
+}
+
+function authFailed() {
+  clearAuthInputs()
+  redShadowPulse(AUTH_ELEMENTS.signInForm)
+}
+
+function clearAuthInputs() {
+  AUTH_ELEMENTS.username.value = ''
+  AUTH_ELEMENTS.password.value = ''
+}
+
+function redShadowPulse(element) {
+  let shadowRadius = 50
+  let animationInterval = setInterval(frame, 20)
+  function frame() {
+    if (shadowRadius == 0) {
+      clearInterval(animationInterval)
+    } else {
+      shadowRadius -= 5
+      element.style.boxShadow = `0px 0px ${shadowRadius}px rgba(255, 0, 0, 1)`
     }
+  }
 }
 
-function distanceBetweenMarkers(markerOne, markerTwo ) {
-  let result = 0
-  result = Math.sqrt(
-              Math.pow((markerTwo.x - markerOne.x), 2)+
-              Math.pow((markerTwo.y - markerOne.y), 2)+
-              Math.pow((markerTwo.z - markerOne.z), 2)
-          )
-  return result
+function handleSignUp(event) {
+  let signUpRequestBody = {
+    name: AUTH_ELEMENTS.username.value,
+    password: AUTH_ELEMENTS.password.value
+  }
+  fetch(PATH.new_user,{
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(signUpRequestBody)
+  })
+    .then(response=>response.json())
+    .then(handleAuthResponse)
+}
+
+function getLeaderBoard() {
+  fetch(PATH.leaders)
+    .then(response=>response.json())
+    .then(displayLeaderBoard)
+}
+
+function displayLeaderBoard(leaderList) {
+  let leaderBoard = document.querySelector('.leader-board')
+  let leaderElements = leaderList.map(leader=>{
+     let li = document.createElement('li')
+     li.innerHTML = `<span>${leader.name}</span><span class='leader-time'>${leader.time}</span>`
+     return li
+  })
+  leaderElements.forEach(element=>leaderBoard.appendChild(element))
+  return leaderList
 }

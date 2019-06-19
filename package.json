@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/DangerN/AR-game#readme",
   "dependencies": {
-    "aframe-state-component": "^6.7.0"
+    "aframe-state-component": "^6.7.0",
+    "lodash": "^4.17.11"
   }
 }
