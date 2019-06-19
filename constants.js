@@ -29,6 +29,5 @@ export const MENU_TOGGLES = {
   authentication: document.querySelector('#sign-in-toggle'),
   leaderBoard: document.querySelector('#leader-board-toggle'),
   winBox: document.querySelector('#win-box-toggle'),
-  instructions: document.querySelector('#instruction-toggle')//,
-  // cycleTime: 500
+  instructions: document.querySelector('#instruction-toggle')
 }

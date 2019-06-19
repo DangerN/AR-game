@@ -43,7 +43,6 @@ function handleWin(event) {
 
 function submitScore(time) {
   if (!!window.localStorage.getItem('token')) {
-    console.log('posting time', time, 'to databse')
     let body = {
       user_id: window.localStorage.getItem('user_id'),
       time: time
@@ -56,30 +55,26 @@ function submitScore(time) {
       },
       body: JSON.stringify(body)
     }).then(response=>response.json())
-      .then(console.log)
-
-
-
-
-
+      .then(handleSubmitResponse)
   } else {
     redShadowPulse(AUTH_ELEMENTS.submitScoreButton)
   }
 }
 
+function handleSubmitResponse(response) {
+  displayLeaderBoard(response)
+}
+
 function toggleMenu(toggleList = Object.keys(MENU_TOGGLES), status = 'open') {
   let toggleDirection = status === 'open' ? true : false
-  console.log(status, Date.now());
-  console.log(toggleDirection);
   toggleList.forEach(toggle=>{MENU_TOGGLES[toggle].checked = toggleDirection})
 }
 
 function handleSignIn(event) {
   event.preventDefault()
-  let form = event.target.parentElement.querySelectorAll('.login-input')
   let loginCredentials = {
-    name: form[0].value,
-    password: form[1].value
+    name: AUTH_ELEMENTS.username.value,
+    password: AUTH_ELEMENTS.password.value
   }
   fetch(PATH.auth,{
     method: 'POST',
@@ -94,7 +89,6 @@ function handleAuthResponse(response) {
 }
 
 function authSuccess(response) {
-  console.log(response);
   window.localStorage.setItem('token', response.auth_token)
   window.localStorage.setItem('name', response.name)
   window.localStorage.setItem('user_id', response.id)
@@ -174,6 +168,11 @@ function getLeaderBoard() {
 }
 
 function displayLeaderBoard(leaderList) {
+  let oldTimes = document.querySelectorAll('.leader-time')
+  console.log('oldTimes', oldTimes);
+  if (oldTimes.length > 0) {
+    oldTimes.forEach(time=>time.parentNode.parentNode.removeChild(time.parentNode))
+  }
   let leaderBoard = document.querySelector('.leader-board')
   let leaderElements = leaderList.map(leader=>{
      let li = document.createElement('li')
