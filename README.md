@@ -20,4 +20,4 @@
 
 ## Contributing
 
-  AR-game is a pretty weak name. If you have a better one, please submit a pull request with your suggestion **<HERE>**
+  AR-game is a pretty weak name. If you have a better one, please submit a pull request with your suggestion **HERE**
