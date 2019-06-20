@@ -1,4 +1,3 @@
-// export const API_BASE = 'http://localhost:3000/'
 export const API_BASE = 'https://ar-game-backend.herokuapp.com/'
 
 export const PATH = {

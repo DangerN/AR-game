@@ -32,6 +32,7 @@ AFRAME.registerState({
               Math.pow((markerTwo.y - markerOne.y), 2)+
               Math.pow((markerTwo.z - markerOne.z), 2)
             )
+            console.log(distance);
             return {[targetMarker]: distance}
       })
     })
@@ -40,21 +41,21 @@ AFRAME.registerState({
       let distanceList = newState.markerDistance[marker].map(distance => Object.values(distance)[0])
       switch (newState.markers[marker].stage) {
         case 0:
-          let closeList = distanceList.filter(distance => distance < 2)
+          let closeList = distanceList.filter(distance => distance < 1.75)
             if (closeList.length > 0) {
               newState.markers[marker].changeStage(1)
               newState.markers[marker].stage += 1
             }
           break
         case 1:
-          let farList = distanceList.filter(distance => distance < 2.5)
+          let farList = distanceList.filter(distance => distance < 2)
           if (farList.length === 0) {
             newState.markers[marker].changeStage(2)
             newState.markers[marker].stage += 1
           }
           break
         case 2:
-          let lineList = distanceList.filter(distance => distance < 2)
+          let lineList = distanceList.filter(distance => distance < 1.75)
           if (lineList.length > 1) {
             newState.markers[marker].changeStage(3)
             newState.markers[marker].stage += 1
