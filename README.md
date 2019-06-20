@@ -2,10 +2,10 @@
 ## How to play
 1. The goal is to get all five markers to display a blue cube.
 2. Markers advance stage based on their position relative to other markers. Stage is represented by color. The stages are:
-* **White** - Initial color.
-* **Green** - Achieved by bringing one marker close to another.
-* **Red** - Achieved by separating markers.
-* **Blue** - Achieved by one marker close to two others.
+  * **White** - Initial color.
+  * **Green** - Achieved by bringing one marker close to another.
+  * **Red** - Achieved by separating markers.
+  * **Blue** - Achieved by one marker close to two others.
 3. Only players who are logged in may submit scores.
 4. A player may log in or sign up under the authentication tab.
 5. Scores are registered in milliseconds.
