@@ -1,7 +1,6 @@
-export const API_BASE = 'https://ar-game-backend.herokuapp.com/'
+const API_BASE = 'https://ar-game-backend.herokuapp.com/'
 
 export const PATH = {
-  base: 'http://localhost:3000/',
   auth: `${API_BASE}authenticate`,
   leaders: `${API_BASE}leaders`,
   new_user: `${API_BASE}new_user`,
