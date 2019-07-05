@@ -148,6 +148,7 @@ function redShadowPulse(element) {
 }
 
 function handleSignUp(event) {
+  showConfirmField()
   let signUpRequestBody = {
     name: AUTH_ELEMENTS.username.value,
     password: AUTH_ELEMENTS.password.value
@@ -159,6 +160,10 @@ function handleSignUp(event) {
   })
     .then(response=>response.json())
     .then(handleAuthResponse)
+}
+
+function showConfirmField() {
+  AUTH_ELEMENTS.confirmPassword.classList.add('show')
 }
 
 function getLeaderBoard() {

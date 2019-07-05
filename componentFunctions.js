@@ -50,6 +50,9 @@ const LIST = {
   filteredDistance: (marker, distanceList) => {
     return distanceList.map(distance => Object.values(distance)[0])
       .filter(distance => distance < ADVANCE_CONDITIONS[marker.stage].distance)
+  },
+  filterSelf: (marker, markerList) => {
+    return markerList.filter(mark => mark !== marker)
   }
 }
 

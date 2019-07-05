@@ -23,7 +23,7 @@ AFRAME.registerState({
     let markerList = Object.keys(newState.markerDistance)
     let markerPositionList = {}
     markerList.forEach(marker => {
-      markerPositionList[marker] = markerList.filter(mark=>mark !== marker).map(targetMarker => {
+      markerPositionList[marker] = LIST.filterSelf(marker, markerList).map(targetMarker => {
             return {
               [targetMarker]: SPACE_MATH.computeDistance(newState.markers[marker], newState.markers[targetMarker])
             }

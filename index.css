@@ -88,7 +88,7 @@
 
 
 .sign-in-checkbox:checked ~ .sign-in-form {
-  height: 52px;
+  height: auto;
   opacity: 1;
   width: 166px;
 }
@@ -106,6 +106,18 @@
   height: 0px;
   margin: 0px;
   opacity: 0;
+  transition: all 0.4s;
+  transition-timing-function: cubic-bezier(.3, .8, .52, -.5);
+}
+
+#confirm-password {
+  height: 0px;
+  width: 0px;
+}
+
+#confirm-password.show {
+  height: 13px;
+  width: 166px;
   transition: all 0.4s;
   transition-timing-function: cubic-bezier(.3, .8, .52, -.5);
 }

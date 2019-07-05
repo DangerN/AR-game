@@ -19,6 +19,7 @@ export const AUTH_ELEMENTS = {
   signUpButton: document.querySelector('#sign-up-button'),
   username: document.querySelector('#username'),
   password: document.querySelector('#password'),
+  confirmPassword: document.querySelector('#confirm-password'),
   replayButton: document.querySelector('#replay-button'),
   submitScoreButton: document.querySelector('#submit-score-button')
 }
